@@ -4,7 +4,7 @@ services:
 
   cli:
     build: .
-    container_name: protoculture-hapi-mongodb-cli
+    container_name: protoculture-hapi-mongoose-cli
 
     volumes:
-      - "./:/protoculture-hapi-mongodb"
+      - "./:/protoculture-hapi-mongoose"

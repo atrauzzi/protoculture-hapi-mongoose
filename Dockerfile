@@ -22,4 +22,4 @@ RUN npm install -g typescript
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-WORKDIR /protoculture-hapi-mongodb
+WORKDIR /protoculture-hapi-mongoose
