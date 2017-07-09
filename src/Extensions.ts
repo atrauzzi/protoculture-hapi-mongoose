@@ -7,22 +7,16 @@ declare module "protoculture/lib/ServiceProvider" {
 
     export interface ServiceProvider {
 
-        configureHapiMongoDb(): void;
-        configureHapiMongoDbCache(): void;
+        configureHapiMongooseCache(): void;
     }
 }
 
-ServiceProvider.prototype.configureHapiMongoDb = function () {
-
-    // Configure the mongoose connection here.
-};
-
 // tslint:disable-next-line:only-arrow-functions
-ServiceProvider.prototype.configureHapiMongoDbCache = function () {
+ServiceProvider.prototype.configureHapiMongooseCache = function () {
 
-    const options: Hapi.ServerOptions = this.bundle.container.get(hapiSymbols.ServerOptions);
+    // const options: Hapi.ServerOptions = this.bundle.container.get(hapiSymbols.ServerOptions);
 
-    options.cache = {
-        engine: "mongoose",
-    };
+    // options.cache = {
+    //     engine: "mongoose",
+    // };
 };
