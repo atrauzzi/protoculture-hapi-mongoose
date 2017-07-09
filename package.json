@@ -1,0 +1,37 @@
+{
+  "name": "protoculture-hapi-mongodb",
+  "author": "Alexander Trauzzi <atrauzzi@gmail.com>",
+  "version": "0.0.0-development",
+  "license": "Apache-2.0",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "build": "tsc",
+    "demo": "ts-node --no-cache demo/server.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/atrauzzi/protoculture-hapi-mongodb.git"
+  },
+  "keywords": [
+    "typescript",
+    "dependency-injection",
+    "inversify",
+    "hapi",
+    "protoculture",
+    "mongodb"
+  ],
+  "bugs": {
+    "url": "https://github.com/atrauzzi/protoculture-hapi-mongodb/issues"
+  },
+  "homepage": "https://github.com/atrauzzi/protoculture-hapi-mongodb#readme",
+  "devDependencies": {
+    "semantic-release": "^6.3.2"
+  },
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "dependencies": {
+    "protoculture": "^2.0.25",
+    "protoculture-hapi": "^1.0.20"
+  }
+}
