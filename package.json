@@ -26,7 +26,7 @@
   },
   "homepage": "https://github.com/atrauzzi/protoculture-hapi-mongoose#readme",
   "devDependencies": {
-    "semantic-release": "^6.3.2"
+    "semantic-release": "^6.3.6"
   },
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
