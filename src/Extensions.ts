@@ -1,22 +1,21 @@
-import { ServiceProvider } from "protoculture";
+import { ServiceProvider as ServiceProvider } from "protoculture";
 import { hapiSymbols } from "protoculture-hapi";
 import * as Hapi from "hapi";
+import { MongooseCache } from "./MongooseCache";
+import { CacheItemModel } from "./CacheItemModel";
 
 
 declare module "protoculture/lib/ServiceProvider" {
 
     export interface ServiceProvider {
 
-        configureHapiMongooseCache(): void;
+        bindHapiMongooseCache(): void;
     }
 }
 
-// tslint:disable-next-line:only-arrow-functions
-ServiceProvider.prototype.configureHapiMongooseCache = function () {
+ServiceProvider.prototype.bindHapiMongooseCache = function () {
 
-    // const options: Hapi.ServerOptions = this.bundle.container.get(hapiSymbols.ServerOptions);
-
-    // options.cache = {
-    //     engine: "mongoose",
-    // };
+    this.bundle.container
+        .bind(hapiSymbols.Cache)
+        .toConstructor(MongooseCache);
 };

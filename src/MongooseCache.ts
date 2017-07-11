@@ -1,41 +1,98 @@
 import * as Catbox from "catbox";
 import * as Boom from "boom";
+import { CacheItemModel, CacheItem } from "./CacheItemModel";
+import * as moment from "moment";
+import * as mongoose from "mongoose";
 
 
+// https://github.com/hapijs/catbox#api
 export class MongooseCache implements Catbox.ClientApi {
 
-    public get(key: Catbox.CacheKey, callback: Catbox.CallBackWithResult<null | Catbox.CachedObject>): Catbox.CacheItem {
+    public get(key: Catbox.CacheKey, callback?: Catbox.CallBackWithResult<null | Catbox.CachedObject>): Catbox.CacheItem {
 
-        throw new Error("Method not implemented.");
+        this.getAsync<Catbox.CacheItem>(key)
+            .then((cacheItem) => callback(null, cacheItem))
+            .catch((error) => callback(Boom.wrap(error), null));
+
+        // todo: Supposedly this returns a "CacheItem", but I dunno how or when...
     }
 
-    public start(callback: Catbox.CallBackNoResult): void {
+    public set(key: Catbox.CacheKey, value: any, ttl: number, callback: Catbox.CallBackNoResult) {
 
-        throw new Error("Method not implemented.");
+        this.setAsync(key, value, ttl)
+            .catch((error: Error) => callback(Boom.wrap(error)));
     }
 
-    public stop(): void {
+    public drop(key: Catbox.CacheKey, callback: Catbox.CallBackNoResult) {
 
-        throw new Error("Method not implemented.");
-    }
-
-    public set(key: Catbox.CacheKey, value: any, ttl: number, callback: Catbox.CallBackNoResult): void {
-
-        throw new Error("Method not implemented.");
-    }
-
-    public drop(key: Catbox.CacheKey, callback: Catbox.CallBackNoResult): void {
-
-        throw new Error("Method not implemented.");
+        this.dropAsync(key)
+            .then(() => callback())
+            .catch((error: Error) => callback(Boom.wrap(error)));
     }
 
     public isReady(): boolean {
 
-        throw new Error("Method not implemented.");
+        return mongoose.connection.readyState === 1;
     }
 
     public validateSegmentName(segment: string): Boom.BoomError {
 
-        throw new Error("Method not implemented.");
+        // I really can't imagine there's such a thing as a _bad segment name_ to this driver.
+        return null;
+    }
+
+    public start(callback: Catbox.CallBackNoResult): void {
+
+        // Probably okay to noop as our mongoose connection is used by more than just the caching layer.
+        // Hypothetically we'd do some kind of reference count if this ended up being important.
+    }
+
+    public stop(): void {
+
+        // Probably okay to noop as our mongoose connection is used by more than just the caching layer.
+        // Hypothetically we'd do some kind of reference count if this ended up being important.
+    }
+
+    public async getAsync<CacheItemType>(key: Catbox.CacheKey): Promise<CacheItemType> {
+
+        const cacheItem = await CacheItemModel
+            .findOne({
+                key,
+            })
+            .exec();
+
+        return cacheItem.value as CacheItemType;
+    }
+
+    public async setAsync(key: Catbox.CacheKey, value: any, ttl?: number) {
+
+        const now = moment().utc();
+        const createdAt = now.clone().toDate();
+
+        const cacheItem: CacheItem = {
+            key,
+            value,
+            createdAt,
+        };
+
+        if (ttl) {
+
+            cacheItem.expiresAt = now
+                .clone()
+                .add(ttl, "s")
+                .toDate();
+        }
+
+        await new CacheItemModel(cacheItem)
+            .save();
+    }
+
+    public async dropAsync(key: Catbox.CacheKey) {
+
+        await CacheItemModel
+            .remove({
+                key,
+            })
+            .exec();
     }
 }

@@ -31,6 +31,7 @@
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "dependencies": {
+    "moment": "^2.18.1",
     "protoculture": "^2.0.25",
     "protoculture-hapi": "^1.0.20",
     "protoculture-mongoose": "^1.0.0"
