@@ -5,7 +5,6 @@ import * as moment from "moment";
 import * as mongoose from "mongoose";
 
 
-// https://github.com/hapijs/catbox#api
 export class MongooseCache implements Catbox.ClientApi {
 
     public get(key: Catbox.CacheKey, callback?: Catbox.CallBackWithResult<null | Catbox.CachedObject>): Catbox.CacheItem {
