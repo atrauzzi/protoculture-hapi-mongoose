@@ -42,8 +42,8 @@ export class MongooseCache implements Catbox.ClientApi {
 
     public start(callback: Catbox.CallBackNoResult): void {
 
-        // Probably okay to noop as our mongoose connection is used by more than just the caching layer.
         // Hypothetically we'd do some kind of reference count if this ended up being important.
+        callback();
     }
 
     public stop(): void {
