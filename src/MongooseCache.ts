@@ -1,3 +1,4 @@
+import * as _ from "lodash";
 import * as Catbox from "catbox";
 import * as Boom from "boom";
 import { CacheItemModel, CacheItem } from "./CacheItemModel";
@@ -59,6 +60,11 @@ export class MongooseCache implements Catbox.ClientApi {
                 key,
             })
             .exec();
+
+        if (_.isNull(cacheItem)) {
+
+            return cacheItem;
+        }
 
         return cacheItem.value as CacheItemType;
     }
