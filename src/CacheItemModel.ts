@@ -21,10 +21,13 @@ const cacheItemSchema = new mongoose.Schema({
     },
     value: mongoose.Schema.Types.Mixed,
     createdAt: Date, // https://docs.mongodb.com/manual/tutorial/expire-data/#expire-documents-at-a-specific-clock-time
-    expiresAt: Date,
+    expiresAt: {
+        type: Date,
+        index: {
+            expires: 0,
+        }
+    },
     ttl: Number,
 });
-
-cacheItemSchema.index({ expiresAt: 1 }, { expiresAfterSeconds: 0 });
 
 export const CacheItemModel = mongoose.model<mongoose.Document & CacheItem>("CacheItem", cacheItemSchema);
