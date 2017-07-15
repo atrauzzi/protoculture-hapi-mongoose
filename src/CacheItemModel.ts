@@ -12,8 +12,11 @@ export interface CacheItem {
 
 const cacheItemSchema = new mongoose.Schema({
     key: {
-        segment: String,
-        id: String,
+        type: {
+            segment: String,
+            id: String,
+        },
+        index: true,
     },
     value: mongoose.Schema.Types.Mixed,
     createdAt: Date, // https://docs.mongodb.com/manual/tutorial/expire-data/#expire-documents-at-a-specific-clock-time

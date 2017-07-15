@@ -98,8 +98,16 @@ export class MongooseCache implements Catbox.ClientApi {
                 .toDate();
         }
 
-        await new CacheItemModel(cacheItem)
-            .save();
+        await CacheItemModel
+            .findOneAndUpdate(
+                { key },
+                cacheItem,
+                {
+                    new: true,
+                    upsert: true,
+                }
+            )
+            .exec();
     }
 
     public async dropAsync(key: Catbox.CacheKey) {
