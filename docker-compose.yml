@@ -7,4 +7,4 @@ services:
     container_name: protoculture-hapi-mongoose-cli
 
     volumes:
-      - "./:/protoculture-hapi-mongoose"
+      - "./:/protoculture"
