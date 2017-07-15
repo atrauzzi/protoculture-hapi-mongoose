@@ -14,13 +14,16 @@ export class MongooseCache implements Catbox.ClientApi {
             .then((envelope) => callback(null, envelope))
             .catch((error) => callback(Boom.wrap(error), null));
 
-        // todo: Supposedly this returns a "CacheItem", but I dunno how or when...
+        return callback;
     }
 
     public set(key: Catbox.CacheKey, value: any, ttl: number, callback: Catbox.CallBackNoResult) {
 
         this.setAsync(key, value, ttl)
+            .then(() => callback(null))
             .catch((error: Error) => callback(Boom.wrap(error)));
+
+        return callback;
     }
 
     public drop(key: Catbox.CacheKey, callback: Catbox.CallBackNoResult) {
@@ -28,6 +31,8 @@ export class MongooseCache implements Catbox.ClientApi {
         this.dropAsync(key)
             .then(() => callback())
             .catch((error: Error) => callback(Boom.wrap(error)));
+
+        return callback;
     }
 
     public isReady(): boolean {
