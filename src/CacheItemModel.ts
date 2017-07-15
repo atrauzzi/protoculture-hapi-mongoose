@@ -7,6 +7,7 @@ export interface CacheItem {
     value: any;
     createdAt: Date;
     expiresAt?: Date;
+    ttl: number;
 }
 
 const cacheItemSchema = new mongoose.Schema({
@@ -15,8 +16,9 @@ const cacheItemSchema = new mongoose.Schema({
         id: String,
     },
     value: mongoose.Schema.Types.Mixed,
-    expiresAt: Date,
     createdAt: Date, // https://docs.mongodb.com/manual/tutorial/expire-data/#expire-documents-at-a-specific-clock-time
+    expiresAt: Date,
+    ttl: Number,
 });
 
 cacheItemSchema.index({ expiresAt: 1 }, { expiresAfterSeconds: 0 });

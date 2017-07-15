@@ -10,8 +10,8 @@ export class MongooseCache implements Catbox.ClientApi {
 
     public get(key: Catbox.CacheKey, callback?: Catbox.CallBackWithResult<null | Catbox.CachedObject>): Catbox.CacheItem {
 
-        this.getAsync<Catbox.CacheItem>(key)
-            .then((cacheItem) => callback(null, cacheItem))
+        this.getAsync(key)
+            .then((envelope) => callback(null, envelope))
             .catch((error) => callback(Boom.wrap(error), null));
 
         // todo: Supposedly this returns a "CacheItem", but I dunno how or when...
@@ -53,7 +53,7 @@ export class MongooseCache implements Catbox.ClientApi {
         // Hypothetically we'd do some kind of reference count if this ended up being important.
     }
 
-    public async getAsync<CacheItemType>(key: Catbox.CacheKey): Promise<CacheItemType> {
+    public async getAsync(key: Catbox.CacheKey): Promise<null | Catbox.CachedObject> {
 
         const cacheItem = await CacheItemModel
             .findOne({
@@ -63,10 +63,14 @@ export class MongooseCache implements Catbox.ClientApi {
 
         if (_.isNull(cacheItem)) {
 
-            return cacheItem;
+            return null;
         }
 
-        return cacheItem.value as CacheItemType;
+        return {
+            item: cacheItem.value,
+            stored: cacheItem.createdAt.getTime(),
+            ttl: cacheItem.ttl,
+        };
     }
 
     public async setAsync(key: Catbox.CacheKey, value: any, ttl?: number) {
@@ -78,6 +82,7 @@ export class MongooseCache implements Catbox.ClientApi {
             key,
             value,
             createdAt,
+            ttl,
         };
 
         if (ttl) {
