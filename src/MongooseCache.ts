@@ -100,7 +100,10 @@ export class MongooseCache implements Catbox.ClientApi {
 
         await CacheItemModel
             .findOneAndUpdate(
-                { key },
+                {
+                    "key.id": { $eq: key.id },
+                    "key.segment": { $eq: key.segment }
+                },
                 cacheItem,
                 {
                     new: true,
