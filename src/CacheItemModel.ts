@@ -17,6 +17,7 @@ const cacheItemSchema = new mongoose.Schema({
             id: String,
         },
         index: true,
+        unique: true,
     },
     value: mongoose.Schema.Types.Mixed,
     createdAt: Date, // https://docs.mongodb.com/manual/tutorial/expire-data/#expire-documents-at-a-specific-clock-time
